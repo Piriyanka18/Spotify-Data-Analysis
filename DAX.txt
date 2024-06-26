@@ -1,0 +1,83 @@
+Measure
+
+Average Stream per year = 
+CALCULATE(
+AVERAGE('spotify_final' [streams]),
+ALLEXCEPT('spotify_final', 'Date'[Year]))
+
+######################################################
+Image html = 
+var x =
+CALCULATE(
+MAX('spotify_final'[coverurl]), 'spotify_final'[streams] = MAX('spotify_final'[streams] ))
+return
+
+"
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<title>Image Cropping</title>
+<style>
+.image-container {
+width: 491px; /* Width of the container */
+height: 168px; /* Height of the container */
+overflow: hidden; /* Hide parts of the image that don't fit */
+position: relative; /* Relative positioning for the child element */
+}
+
+.image {
+object-fit: cover; /* Cover the entire container */
+object-position: center; /* Center the image */
+width: 100%; /* Full width */
+height: 100%; /* Full height */
+}
+</style>
+</head>
+<body>
+<div class='image-container'>
+<img src='"&x&"' alt='Album Cover' class='image'>
+</div>
+</body>
+</html>
+"
+
+##############################################################
+max_streams = max('spotify_final'[streams])
+
+##############################################################
+percent_val = AVERAGE(spotify_final[energy])
+
+#############################################################
+Top Song streams = 
+
+ CALCULATE(
+
+SUM('spotify_final'[streams]),
+
+'spotify_final'[streams] = MAX('spotify_final'[streams])
+
+)
+
+##############################################################
+Top song vs AVG = 
+
+VAR x = [Top song vs avg val] RETURN
+IF(x > 0,
+FORMAT(x, "#.0%") & " " & UNICHAR (9650),
+FORMAT(x, "#.0%") & " " & UNICHAR (9660))
+
+##########################################################
+Top song vs avg val = 
+
+DIVIDE(
+
+[Top Song streams] - [Average Stream per year] ,
+[Average Stream per year]
+
+)
+
+##############################################################
+track = COUNT(spotify_final[trackname])
+
+##############################################################
